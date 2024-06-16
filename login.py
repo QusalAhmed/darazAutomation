@@ -47,8 +47,7 @@ class Login:
         # self.wait.until(ec.presence_of_element_located((By.NAME, 'submit'))).click()
 
         # For old login page
-        (self.wait.until(ec.element_to_be_clickable((By.CSS_SELECTOR, ".accountContent [type='text']"))).
-         send_keys(self.email))
+        self.driver.find_element(By.CSS_SELECTOR, ".accountContent [type='text']").send_keys(self.email)
         self.driver.find_element(By.CSS_SELECTOR, ".accountContent [type='password']").send_keys(self.password)
         self.driver.find_element(By.CSS_SELECTOR, ".loginButtonStyle").click()
         self.wait.until(ec.url_contains('https://sellercenter.daraz.com.bd/apps/home/new'))
@@ -67,5 +66,5 @@ class Login:
             return False
 
     def login_status(self):
-        self.load_chat_page()
+        self.load_page('https://sellercenter.daraz.com.bd/apps/im/chat')
         return 'apps/im/chat' in self.driver.current_url

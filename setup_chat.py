@@ -24,4 +24,3 @@ def setup(instance):
         (By.CSS_SELECTOR, '.next-tabs-tab:nth-child(1) .next-tabs-tab-inner'))).click()
     wait.until(ec.element_to_be_clickable(
         (By.CSS_SELECTOR, '.aplus-auto-exp:nth-child(2) .next-tag-body'))).click()
-
