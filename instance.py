@@ -1,7 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
 
 # local imports
 from connection import check_connection
@@ -18,9 +19,9 @@ class DriverSetup:
         options = webdriver.ChromeOptions()
         options.page_load_strategy = 'eager'
         options.add_argument('--start-maximized')
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
         options.add_argument('--disable-gpu')
-        # options.add_argument('--no-sandbox')
+        options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--ignore-certificate-errors')
         options.add_argument('--ignore-ssl-errors')
@@ -54,8 +55,8 @@ class DriverSetup:
         })
 
         self.driver = webdriver.Chrome(service=service, options=options)
-        self.driver.implicitly_wait(10)
-        self.driver.set_page_load_timeout(10)
+        self.driver.implicitly_wait(1)
+        self.driver.set_page_load_timeout(20)
 
         self.wait = WebDriverWait(self.driver, 10)
         self.mouse = webdriver.ActionChains(self.driver)
@@ -68,3 +69,18 @@ class DriverSetup:
 
     def quit_driver(self):
         self.driver.quit()
+
+
+class Locator:
+    def __init__(self, instance):
+        self.driver: webdriver.Chrome = instance.get_driver()
+        self.wait: WebDriverWait = instance.get_wait()
+
+    def locate(self, locator):
+        return self.wait.until(ec.presence_of_element_located(locator))
+
+    def locate_all(self, locator):
+        return self.wait.until(ec.presence_of_all_elements_located(locator))
+
+    def locate_clickable(self, locator):
+        return self.wait.until(ec.element_to_be_clickable(locator))

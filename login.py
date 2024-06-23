@@ -25,6 +25,9 @@ class Login:
     def full(self):
         if not self.load_cookie():
             self.fill_credentials()
+        cursor.execute('UPDATE process_time SET execution_time = %s WHERE (shop_name, process_name) = (%s, %s)',
+                       (datetime.now(), self.shop_name, 'login_time',))
+        connection.commit()
 
     def load_cookie(self):
         self.load_page('https://sellercenter.daraz.com.bd/apps/seller/login')
@@ -42,14 +45,14 @@ class Login:
     def fill_credentials(self):
         self.driver.delete_all_cookies()
         self.load_page('https://sellercenter.daraz.com.bd/apps/seller/login')
-        # self.wait.until(ec.presence_of_element_located((By.ID, 'account'))).send_keys(self.email)
-        # self.wait.until(ec.presence_of_element_located((By.ID, 'password'))).send_keys(self.password)
-        # self.wait.until(ec.presence_of_element_located((By.NAME, 'submit'))).click()
+        self.wait.until(ec.presence_of_element_located((By.ID, 'account'))).send_keys(self.email)
+        self.wait.until(ec.presence_of_element_located((By.ID, 'password'))).send_keys(self.password)
+        self.wait.until(ec.element_to_be_clickable((By.XPATH, '//button[@type="submit"]'))).click()
 
         # For old login page
-        self.driver.find_element(By.CSS_SELECTOR, ".accountContent [type='text']").send_keys(self.email)
-        self.driver.find_element(By.CSS_SELECTOR, ".accountContent [type='password']").send_keys(self.password)
-        self.driver.find_element(By.CSS_SELECTOR, ".loginButtonStyle").click()
+        # self.driver.find_element(By.CSS_SELECTOR, ".accountContent [type='text']").send_keys(self.email)
+        # self.driver.find_element(By.CSS_SELECTOR, ".accountContent [type='password']").send_keys(self.password)
+        # self.driver.find_element(By.CSS_SELECTOR, ".loginButtonStyle").click()
         self.wait.until(ec.url_contains('https://sellercenter.daraz.com.bd/apps/home/new'))
 
         if self.login_status():

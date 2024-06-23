@@ -2,7 +2,7 @@ import re
 
 
 def to_md(text):
-    return re.sub(r'([\[*_])', r'\\\1', text)
+    return re.sub(r'([.~`>#+=|{}()!\-\[\]*_\\])', r'\\\1', text)
 
 
 def simplified_text(input_string):

@@ -3,7 +3,7 @@ import requests
 
 
 def check_connection():
-    response = requests.get('https://www.google.com')
+    response = requests.get('https://fast.com/')
     if response.status_code == 200:
         return True
     else:
